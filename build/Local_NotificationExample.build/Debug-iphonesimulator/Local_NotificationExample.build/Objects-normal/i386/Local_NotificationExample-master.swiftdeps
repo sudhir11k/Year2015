@@ -1,0 +1,5 @@
+version: "Apple Swift version 1.2 (swiftlang-602.0.53.1 clang-602.0.53)"
+options: "2cd0a990ef950ec6fb13738929d3c740"
+inputs: 
+- "/Users/sudhirkumar/Desktop/Local_NotificationExample/Local_NotificationExample/ViewController.swift"
+- "/Users/sudhirkumar/Desktop/Local_NotificationExample/Local_NotificationExample/AppDelegate.swift"

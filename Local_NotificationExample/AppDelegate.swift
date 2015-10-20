@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Local_NotificationExample
 //
-//  Created by Sudhir Kumar on 9/21/15.
+//  Created by sudhir Kumar Kumar on 9/21/15.
 //  Copyright (c) 2015 Citibank. All rights reserved.
 //
 
@@ -16,6 +16,82 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Sound |
+            UIUserNotificationType.Alert | UIUserNotificationType.Badge, categories: nil))
+        
+        
+        //        UILocalNotification *localNotif =
+        //            [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+        //        if (localNotif) {
+        //            NSString *itemName = [localNotif.userInfo objectForKey:ToDoItemKey];
+        //            [viewController displayItem:itemName];  // custom method
+        //            app.applicationIconBadgeNumber = localNotif.applicationIconBadgeNumber-1;
+        //        }
+        application.applicationState
+        
+        
+        NSLog("application status \(application.applicationState)")
+        
+        
+        switch application.applicationState{
+        case  UIApplicationState.Active :
+            NSLog("---> Active")
+        case UIApplicationState.Inactive :
+            NSLog("---> Inactive")
+        case UIApplicationState.Background :
+            NSLog("---> Background")
+        default  :
+            NSLog("---> default")
+            
+        }
+        
+        
+        if let aLaunchOptions = launchOptions {
+            
+            if let launchOpts:NSDictionary = launchOptions {
+                if let notification = (aLaunchOptions as NSDictionary).objectForKey("UIApplicationLaunchOptionsLocalNotificationKey") as? UILocalNotification {
+                    
+                    var statusStr = self.getApplicationStatus()
+                    NSLog("UIApplicationLaunchOptionsLocalNotificationKey %@", statusStr)
+                    
+                    let alert = UIAlertView()
+                    alert.title = ""
+                    alert.message = "UIApplicationLaunchOptionsLocalNotificationKey"
+                    alert.addButtonWithTitle("OK")
+                    alert.show()
+                    
+                    
+                }else{
+                    NSLog("2. sudhir Kumar  launchOptions")
+                    
+                    let alert = UIAlertView()
+                    alert.title = ""
+                    alert.message = "else OF UIApplicationLaunchOptionsLocalNotificationKey"
+                    alert.addButtonWithTitle("OK")
+                    alert.show()
+                }
+            }else{
+                
+                var statusStr = self.getApplicationStatus()
+                NSLog("else %@", statusStr)
+                
+                let alert = UIAlertView()
+                alert.title = ""
+                alert.message = "launchOptions not Dictionary"
+                alert.addButtonWithTitle("OK")
+                alert.show()
+                //NSLog("else UIApplicationLaunchOptionsLocalNotificationKey")
+            }
+        }else{
+            
+            let alert = UIAlertView()
+            alert.title = ""
+            alert.message = "launchOptions = nil"
+            alert.addButtonWithTitle("OK")
+            alert.show()
+        }
+        
+        
         return true
     }
 
@@ -40,7 +116,62 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification){
+        
+        var statusStr = self.getApplicationStatus()
+        NSLog("didReceiveLocalNotification %@", statusStr)
+        
+        NSLog("3. sudhir Kumar didReceiveLocalNotification")
+        //self.testGimbel("didReceiveLocalNotification")
+    }
+    
+    
+    func testGimbel(string : String){
+        NSLog("scheduling local notification")
+        
+        var localNotification: UILocalNotification = UILocalNotification()
+        localNotification.alertBody = string
+        localNotification.alertAction = "ok"
+        localNotification.fireDate = NSDate(timeIntervalSinceNow: 0)
+        localNotification.userInfo = ["title":".SingleCTA" , "UUID": "0001"] // assign a unique identifier to the
+        localNotification.category = "Door Pooper"
+        UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+    }
+    
+    
+    func getApplicationStatus() -> String{
+        
+        switch UIApplication.sharedApplication().applicationState{
+        case  UIApplicationState.Active :
+           return ("Active")
+        case UIApplicationState.Inactive :
+            return ("Inactive")
+        case UIApplicationState.Background :
+            return ("Background")
+        default  :
+           return ("default")
+            
+        }
+    }
+    
+    
+    func application(application: UIApplication,
+        handleActionWithIdentifier identifier: String?,
+        forLocalNotification notification: UILocalNotification,
+        completionHandler: () -> Void)
+    {
+        
+        
+        UIApplication.sharedApplication().applicationIconBadgeNumber = 0
+        if(identifier == "OK_ACTION"){
+            
+           
+        }
+        completionHandler()
+    }
 
+    
 
 }
 
